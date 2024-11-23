@@ -1,0 +1,36 @@
+package com.example.sshclient.protocols;
+
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+
+public class SshProtocol implements Protocol {
+    private Session session;
+    private int port = 22; // Default SSH port
+
+    @Override
+    public void connect(String host, int port, String username, String password) throws Exception {
+        this.port = port; // Set the custom port
+        JSch jsch = new JSch();
+        session = jsch.getSession(username, host, this.port);
+        session.setPassword(password);
+        session.setConfig("StrictHostKeyChecking", "no");
+        session.connect();
+    }
+
+    @Override
+    public void disconnect() {
+        if (session != null && session.isConnected()) {
+            session.disconnect();
+        }
+    }
+
+    @Override
+    public boolean isConnected() {
+        return session != null && session.isConnected();
+    }
+
+    @Override
+    public void setPort(int port) {
+        this.port = port; // Allow the port to be set dynamically
+    }
+}
