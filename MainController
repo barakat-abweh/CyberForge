@@ -1,0 +1,59 @@
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
+import javafx.scene.control.TextField;
+
+public class MainController {
+
+    @FXML
+    private TextField nameField;
+
+    @FXML
+    private TextField protocolField;
+
+    @FXML
+    private TextField hostField;
+
+    @FXML
+    private TextField portField;
+
+    @FXML
+    private TextField usernameField;
+
+    @FXML
+    private Button addButton;
+
+    @FXML
+    private ListView<Connection> connectionList;
+
+    private ObservableList<Connection> connections;
+
+    @FXML
+    public void initialize() {
+        connections = FXCollections.observableArrayList();
+        connectionList.setItems(connections);
+
+        addButton.setOnAction(event -> {
+            String name = nameField.getText();
+            String protocol = protocolField.getText();
+            String host = hostField.getText();
+            int port = Integer.parseInt(portField.getText());
+            String username = usernameField.getText();
+
+            Connection connection = new Connection(name, protocol, host, port, username);
+            connections.add(connection);
+
+            clearFields();
+        });
+    }
+
+    private void clearFields() {
+        nameField.clear();
+        protocolField.clear();
+        hostField.clear();
+        portField.clear();
+        usernameField.clear();
+    }
+}
